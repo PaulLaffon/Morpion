@@ -64,7 +64,11 @@ void Jeu::indiquerVainqueur(int pos1, int pos2, int pos3)
     m_partieFinie = true;
     char vainqueur = m_grille[pos1];
 
-    m_grille[pos1] = m_grille[pos2] = m_grille[pos3] = PION_VICTOIRE;
+
+    if(vainqueur == JOUEUR1)
+        m_grille[pos1] = m_grille[pos2] = m_grille[pos3] = VICTOIRE_JOUEUR1;
+    else if(vainqueur == JOUEUR2)
+        m_grille[pos1] = m_grille[pos2] = m_grille[pos3] = VICTOIRE_JOUEUR2;
 
     emit changementGrille(m_grille);
     emit signalVictoire(vainqueur); // Affiche un messageBox

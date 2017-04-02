@@ -27,10 +27,6 @@ void canvas::paintEvent(QPaintEvent *)
 
     QColor noir(0, 0, 0);
     QColor blanc(255, 255, 255);
-    QColor bleu(0, 0, 255);
-    QColor rouge(255, 0, 0);
-    QColor vert(0, 255, 0);
-
 
     // Rempli la zone en noir
     painter.fillRect(0, 0, TAILLE_HORIZONTAL, TAILLE_VERTICAL, noir);
@@ -52,19 +48,34 @@ void canvas::paintEvent(QPaintEvent *)
     {
         if(grille[i] != VIDE)
         {
-            QColor colorActu;
-
-            if(grille[i] == JOUEUR1)
-                colorActu = rouge;
-            else if(grille[i] == JOUEUR2)
-                colorActu = bleu;
-            else if(grille[i] == PION_VICTOIRE)
-                colorActu = vert;
-
             int x = i % NB_CASE_HORIZONTAL;
             int y = i / NB_CASE_HORIZONTAL;
 
-            painter.fillRect(x * TAILLE_CASE, y * TAILLE_CASE, TAILLE_CASE, TAILLE_CASE, colorActu);
+            if(grille[i] == JOUEUR1 || grille[i] == VICTOIRE_JOUEUR1)
+            {
+                if(grille[i] == JOUEUR1)
+                    painter.setPen(QPen(Qt::white, 8));
+                else
+                    painter.setPen(QPen(Qt::red, 8));
+
+                painter.drawLine(x * TAILLE_CASE + 12, y * TAILLE_CASE + 12, (x+1) * TAILLE_CASE - 12, (y+1) * TAILLE_CASE - 12);
+                painter.drawLine((x+1) * TAILLE_CASE - 12, y * TAILLE_CASE + 12, x * TAILLE_CASE + 12, (y+1) * TAILLE_CASE - 12);
+            }
+            else // Si c'est un pion du joueur 2
+            {
+                if(grille[i] == JOUEUR2)
+                {
+                    painter.setBrush(Qt::white);
+                    painter.setPen(Qt::white);
+                }
+                else // SI c'est un pion de victoire
+                {
+                    painter.setBrush(Qt::red);
+                    painter.setPen(Qt::red);
+                }
+
+                painter.drawEllipse(QPoint((x + 0.5) * TAILLE_CASE, (y + 0.5) * TAILLE_CASE), TAILLE_CASE / 2 - 10, TAILLE_CASE / 2 - 10);
+            }
         }
     }
 
