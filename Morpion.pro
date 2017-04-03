@@ -26,9 +26,11 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += main.cpp\
         mainwindow.cpp \
     canvas.cpp \
-    jeu.cpp
+    jeu.cpp \
+    ia.cpp
 
 HEADERS  += mainwindow.h \
     canvas.h \
     const.h \
-    jeu.h
+    jeu.h \
+    ia.h
