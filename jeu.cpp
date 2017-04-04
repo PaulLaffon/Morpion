@@ -73,7 +73,7 @@ void Jeu::victory()
 
     // On vérifie qu'il n'y a pas match nul
     bool matchNul = true;
-    for(int i = 0; i < m_grille.size(); i++)
+    for(unsigned int i = 0; i < m_grille.size(); i++)
     {
         if(m_grille[i] == VIDE)
         {
@@ -122,6 +122,12 @@ void Jeu::recommencer(bool avecIA, char typeIA, bool IACommence)
     }
     else
     {
+        if(IACommence)
+            m_tourIa = JOUEUR1;
+        else
+            m_tourIa = JOUEUR2;
+
+
         // Si le type d'IA change, on doit recharger le nouveau type
         if(m_typeOfIa != typeIA)
         {
@@ -133,18 +139,15 @@ void Jeu::recommencer(bool avecIA, char typeIA, bool IACommence)
 
             switch (m_typeOfIa) {
             case RANDOM_IA:
-                m_ia = new IA;
+                m_ia = new IA();
+                break;
+            case MIN_MAX_IA:
+                m_ia = new IAMinMax();
                 break;
             default:
                 break;
             }
         }
-
-
-        if(IACommence)
-            m_tourIa = JOUEUR1;
-        else
-            m_tourIa = JOUEUR2;
     }
 
     m_partieFinie = false;
@@ -163,7 +166,7 @@ void Jeu::recommencer(bool avecIA, char typeIA, bool IACommence)
 //Fait jouer l'IA qui a été chargée en mémoire
 void Jeu::playIA()
 {
-    m_ia->updateGrille(m_grille);
+    m_ia->updateGrille(m_grille, m_tourIa);
     unsigned int coups = m_ia->play();
 
     if(coups >= m_grille.size() || m_grille[coups] != VIDE)

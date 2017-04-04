@@ -3,6 +3,7 @@
 
 #include "const.h"
 #include "ia.h"
+#include "iaminmax.h"
 
 class Jeu : public QObject
 {

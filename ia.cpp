@@ -5,9 +5,10 @@ IA::IA(QObject *parent) : QObject(parent)
 
 }
 
-void IA::updateGrille(const vector<char> &g)
+void IA::updateGrille(const vector<char> &g, char couleurIA)
 {
     m_grille = g;
+    m_couleurPions = couleurIA;
 }
 
 int IA::play()

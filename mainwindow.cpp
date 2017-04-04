@@ -38,6 +38,7 @@ MainWindow::MainWindow(QWidget *parent) : QWidget(parent)
     // Le choix du type de l'IA contre laquelle on va jouer
     m_choixIA = new QComboBox(this);
     m_choixIA->addItem("IA Random");
+    m_choixIA->addItem("IA Min Max");
 
 
     m_layoutPrincipal->addWidget(m_canvas);
