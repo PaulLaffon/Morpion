@@ -166,8 +166,14 @@ void Jeu::recommencer(bool avecIA, char typeIA, bool IACommence)
 //Fait jouer l'IA qui a été chargée en mémoire
 void Jeu::playIA()
 {
+    QTime t;
+    t.start();
+
     m_ia->updateGrille(m_grille, m_tourIa);
     unsigned int coups = m_ia->play();
+
+    // Voir le temps de calcul du coup
+    //qDebug("Time elapsed: %d ms", t.elapsed());
 
     if(coups >= m_grille.size() || m_grille[coups] != VIDE)
     {

@@ -28,11 +28,13 @@ SOURCES += main.cpp\
     canvas.cpp \
     jeu.cpp \
     ia.cpp \
-    iaminmax.cpp
+    iaminmax.cpp \
+    judge.cpp
 
 HEADERS  += mainwindow.h \
     canvas.h \
     const.h \
     jeu.h \
     ia.h \
-    iaminmax.h
+    iaminmax.h \
+    judge.h

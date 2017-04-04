@@ -63,10 +63,20 @@ MainWindow::MainWindow(QWidget *parent) : QWidget(parent)
     // Recommence la partie quand on appuie sur le bouton
     connect(m_recommencer, SIGNAL(clicked(bool)), this, SLOT(recommencer()));
 
+    QTime t;
+    t.start();
 
+    IA *a = new IAMinMax;
+    IA *m = new IAMinMax;
 
+    Judge *j = new Judge;
+    j->setParticipant1(a);
+    j->setParticipant2(m);
 
-
+    const int nombre = 100;
+    pair<int, int> result = j->gagnant(nombre, true);
+    qDebug("Nombre gagne par premier : %d, deuxieme : %d, nul : %d", result.first, result.second, nombre - result.first - result.second);
+    qDebug("Time elapsed: %d ms", t.elapsed());
 
     jeu->recommencer(m_avecIa->isChecked(), m_choixIA->currentIndex(), m_iaCommence->isChecked());
 }

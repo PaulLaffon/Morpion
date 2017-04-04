@@ -4,6 +4,7 @@
 #include "const.h"
 #include "canvas.h"
 #include "jeu.h"
+#include "judge.h"
 
 class MainWindow : public QWidget
 {
