@@ -14,12 +14,17 @@ using namespace std;
 
 #include <QHBoxLayout>
 #include <QPushButton>
+#include <QGroupBox>
+#include <QRadioButton>
+#include <QComboBox>
 
 #include <QMessageBox>
 
 #include <vector>
+#include <ctime>
 
 enum {VIDE = -1, JOUEUR1 = 0, JOUEUR2 = 1, VICTOIRE_JOUEUR1 = 2, VICTOIRE_JOUEUR2 = 3};
+enum {AUCUNE_IA = -1, RANDOM_IA = 0, MIN_MAX_IA = 1};
 
 #define TAILLE_CASE 100
 #define NB_CASE_HORIZONTAL 3
@@ -30,6 +35,7 @@ enum {VIDE = -1, JOUEUR1 = 0, JOUEUR2 = 1, VICTOIRE_JOUEUR1 = 2, VICTOIRE_JOUEUR
 
 #define TAILLE_ESPACE 5
 
+#define INFINI 1000
 
 
 

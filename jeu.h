@@ -2,6 +2,8 @@
 #define JEU_H
 
 #include "const.h"
+#include "ia.h"
+#include "iaminmax.h"
 
 class Jeu : public QObject
 {
@@ -9,6 +11,9 @@ class Jeu : public QObject
 
 public:
     Jeu(QWidget *parent = nullptr);
+    ~Jeu();
+
+    void recommencer(bool avecIA, char typeIa, bool IACommence);
 
 private:
     vector<char> m_grille;
@@ -16,9 +21,15 @@ private:
     char m_tourActu;
     bool m_partieFinie;
 
+    char m_typeOfIa;
+    char m_tourIa;
+
+
+    IA *m_ia;
 
     void victory(); // Envoie un signal (victoire) si un joueur a gagné
     void indiquerVainqueur(int pos1, int pos2, int pos3);
+    void playIA();
 
 signals:
     void changementGrille(vector<char> &g);
@@ -26,7 +37,6 @@ signals:
 
 public slots:
     void actualiserGrille(int numero);
-    void recommencer();
 };
 
 #endif // JEU_H
