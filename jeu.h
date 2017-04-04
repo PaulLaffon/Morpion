@@ -4,6 +4,7 @@
 #include "const.h"
 #include "ia.h"
 #include "iaminmax.h"
+#include "iareseauneurone.h"
 
 class Jeu : public QObject
 {

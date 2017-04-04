@@ -39,6 +39,14 @@ MainWindow::MainWindow(QWidget *parent) : QWidget(parent)
     m_choixIA = new QComboBox(this);
     m_choixIA->addItem("IA Random");
     m_choixIA->addItem("IA Min Max");
+    m_choixIA->addItem("IA Reseau de Neurones");
+
+    // Le choix du fichier pour un IA réseau de neurones
+    m_filepath = new QLineEdit(this);
+    m_choosefilepath = new QPushButton("Choisir fichier", this);
+    QHBoxLayout *layoutChoixFile = new QHBoxLayout;
+    layoutChoixFile->addWidget(m_filepath);
+    layoutChoixFile->addWidget(m_choosefilepath);
 
 
     m_layoutPrincipal->addWidget(m_canvas);
@@ -47,6 +55,7 @@ MainWindow::MainWindow(QWidget *parent) : QWidget(parent)
     m_layoutDroite->addWidget(m_recommencer);
     m_layoutDroite->addWidget(m_groupBox);
     m_layoutDroite->addWidget(m_choixIA);
+    m_layoutDroite->addLayout(layoutChoixFile);
     m_layoutDroite->addWidget(m_commence);
 
     this->setLayout(m_layoutPrincipal);
@@ -63,26 +72,30 @@ MainWindow::MainWindow(QWidget *parent) : QWidget(parent)
     // Recommence la partie quand on appuie sur le bouton
     connect(m_recommencer, SIGNAL(clicked(bool)), this, SLOT(recommencer()));
 
+    // Choix du fichier quand on appuie sur le bouton
+    connect(m_choosefilepath, SIGNAL(clicked(bool)), this, SLOT(choisirFichier()));
+
     QTime t;
     t.start();
 
-    IA *a = new IAMinMax;
-    IA *m = new IAMinMax;
+    IA *m = new IAReseauNeurone("C:\\Users\\Paul\\Documents\\Qt\\Morpion\\neuralnetwork\\first.txt");
 
-    Judge *j = new Judge;
-    j->setParticipant1(a);
-    j->setParticipant2(m);
+    pair<int, int> r = m->train(0);
 
-    const int nombre = 100;
-    pair<int, int> result = j->gagnant(nombre, true);
-    qDebug("Nombre gagne par premier : %d, deuxieme : %d, nul : %d", result.first, result.second, nombre - result.first - result.second);
+
+    qDebug("Partie perdue début : %d, Partie perdu fin : %d", r.first, r.second);
     qDebug("Time elapsed: %d ms", t.elapsed());
+
+
+
+
 
     jeu->recommencer(m_avecIa->isChecked(), m_choixIA->currentIndex(), m_iaCommence->isChecked());
 }
 
 MainWindow::~MainWindow()
 {
+    /*
     delete m_iaCommence;
     delete m_playerCommence;
     delete m_commence;
@@ -98,7 +111,7 @@ MainWindow::~MainWindow()
 
     delete m_canvas;
     delete m_layoutPrincipal;
-
+    */
     delete jeu;
 }
 
@@ -115,4 +128,9 @@ void MainWindow::indiquerVainqueur(char vainqueur)
 void MainWindow::recommencer()
 {
     jeu->recommencer(m_avecIa->isChecked(), m_choixIA->currentIndex(), m_iaCommence->isChecked());
+}
+
+void MainWindow::choisirFichier()
+{
+    m_filepath->setText(QFileDialog::getSaveFileName(this, "Choix du fichier", QString(), "Fichiers textes (*.txt *.xml)"));
 }

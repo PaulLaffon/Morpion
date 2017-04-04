@@ -29,7 +29,10 @@ SOURCES += main.cpp\
     jeu.cpp \
     ia.cpp \
     iaminmax.cpp \
-    judge.cpp
+    judge.cpp \
+    coucheneurones.cpp \
+    reseauneurone.cpp \
+    iareseauneurone.cpp
 
 HEADERS  += mainwindow.h \
     canvas.h \
@@ -37,4 +40,7 @@ HEADERS  += mainwindow.h \
     jeu.h \
     ia.h \
     iaminmax.h \
-    judge.h
+    judge.h \
+    coucheneurones.h \
+    reseauneurone.h \
+    iareseauneurone.h

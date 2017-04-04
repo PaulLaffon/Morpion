@@ -5,6 +5,7 @@
 #include "canvas.h"
 #include "jeu.h"
 #include "judge.h"
+#include "reseauneurone.h"
 
 class MainWindow : public QWidget
 {
@@ -25,6 +26,9 @@ private:
     QRadioButton *m_avecIa;
     QRadioButton *m_sansIa;
 
+    QLineEdit *m_filepath;
+    QPushButton *m_choosefilepath;
+
     QGroupBox *m_commence;
     QRadioButton *m_playerCommence;
     QRadioButton *m_iaCommence;
@@ -36,6 +40,8 @@ private:
 public slots:
     void indiquerVainqueur(char vainqueur);
     void recommencer();
+
+    void choisirFichier();
 };
 
 #endif // MAINWINDOW_H

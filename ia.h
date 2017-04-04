@@ -11,6 +11,7 @@ public:
 
     virtual int play(); // Methode qui renvoie la case sur laquelle l'IA joue
     virtual void updateGrille(const vector<char> &g, char couleurIA);
+    virtual pair<int, int> train(char typeMethode);
 
 protected:
     vector<char> m_grille;

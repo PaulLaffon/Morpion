@@ -23,3 +23,8 @@ int IA::play()
     int n = rand() % caseVide.size();
     return caseVide[n];
 }
+
+pair<int, int> IA::train(char typeMethode)
+{
+    qDebug("On ne peut pas entrainer cette classe avec cette methode : %c", typeMethode);
+}
