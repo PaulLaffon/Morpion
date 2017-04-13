@@ -112,7 +112,7 @@ void Jeu::indiquerVainqueur(int pos1, int pos2, int pos3)
 }
 
 // Recommence ou commence la partie en fonction des paramètres
-void Jeu::recommencer(bool avecIA, char typeIA, bool IACommence)
+void Jeu::recommencer(bool avecIA, char typeIA, bool IACommence, string filename)
 {
     m_tourActu = JOUEUR1;
 
@@ -143,6 +143,9 @@ void Jeu::recommencer(bool avecIA, char typeIA, bool IACommence)
                 break;
             case MIN_MAX_IA:
                 m_ia = new IAMinMax();
+                break;
+            case RESEAU_NEURONE_IA:
+                m_ia = new IAReseauNeurone(filename);
                 break;
             default:
                 break;

@@ -1,128 +1,95 @@
 #include "reseauneurone.h"
 
-// Constructeur d'un réseau de neurones aléatoire
-ReseauNeurone::ReseauNeurone(string file_name, int nbCouches, vector<int>& neuroneParCouche) : QObject()
+ReseauNeurone::ReseauNeurone(const vector<int> &neuroneParCouche)
 {
-    filename = file_name;
-
-    if(nbCouches < 2)
+    // On ajoute n - 1 couche car la dernière ne fait que office de résultat
+    // Or le résultat est stocké dans l'avant dernière couche, donc on a pas besoin de la dernière
+    for(int i = 0; i < (int)neuroneParCouche.size() - 1; i++)
     {
-        qDebug("Pas possible de faire un réseau de neurones avec moins de 2 couches");
-        return;
+        // On appelle le constructeur random de la couche
+        reseau.push_back(CoucheNeurones(neuroneParCouche[i], neuroneParCouche[i+1]));
     }
-    if(nbCouches != (int)neuroneParCouche.size())
-    {
-        qDebug("La taille du nombre de neurones par couche ne corresponds pas à celle du nombre de couches");
-        return;
-    }
-
-    // On alloue le bon nombre de couches
-    reseau.resize(nbCouches);
-    reseau[0] = new CoucheNeurones(neuroneParCouche[0], ENTREE);
-    // On alloue les couches caches
-    for(int i = 1; i < nbCouches - 1; i++)
-    {
-        reseau[i] = new CoucheNeurones(neuroneParCouche[i], HIDDEN);
-    }
-    // On alloue la couche de sortie
-    reseau.back() = new CoucheNeurones(neuroneParCouche.back(), SORTIE);
-
-    // On initialize nos couches avec des poids aléatoire (sauf la dernière ou on ne se sert pas de ses poids)
-    for(int i = 0; i < nbCouches - 1; i++)
-    {
-        reseau[i]->initializeRandom(reseau[i+1]->getNbNeurones());
-    }
-
-    // On sauvegarde le nouveau réseau fraichement créé de façon aléatoire
-    save(filename);
 }
 
-// Constructeur d'un réseau de neurones qui charge le fichier contenant le réseau de neurones
-ReseauNeurone::ReseauNeurone(string file_name)
-{
-    filename = file_name;
 
+
+// Constructeur d'un réseau de neurones qui charge le fichier contenant le réseau de neurones
+ReseauNeurone::ReseauNeurone(const string& file_name)
+{
     load(file_name);
+}
+
+ReseauNeurone::ReseauNeurone(ifstream &file)
+{
+    load(file);
+}
+
+ReseauNeurone::ReseauNeurone(const ReseauNeurone &parent1, const ReseauNeurone &parent2)
+{
+    for(unsigned int i = 0; i < parent1.getNbCouche(); i++)
+    {
+        reseau.push_back(CoucheNeurones(parent1.getCouche(i), parent2.getCouche(i)));
+    }
 }
 
 ReseauNeurone::~ReseauNeurone()
 {
-    save(filename);
 
-    for(unsigned int i = 0; i < reseau.size(); i++)
-        delete reseau[i];
 }
 
-void ReseauNeurone::save(string &file_name)
+void ReseauNeurone::save(ofstream &file)
 {
-    ofstream file;
-    file.open(file_name);
-
     // Nombre de couche
     file << reseau.size() << endl;
 
-    // Neurones par couches
-    for(unsigned int i = 0; i < reseau.size(); i++)
-    {
-        file << reseau[i]->getNbNeurones() << " ";
-    }
-
     file << endl;
 
-    // Pour chaque couche sauf la dernière on sauvegarde les poids
-    for(unsigned int i = 0; i < reseau.size() - 1; i++)
+    // POur chaque couche du réseau de neurones (il y a n-1 couches)
+    for(unsigned int i = 0; i < reseau.size(); i++)
     {
         // On affiche les dimension de la matrice
-        file << reseau[i]->getPoids().size() << " " << reseau[i]->getPoids().at(0).size() << endl;
+        file << reseau[i].getNbNeurones() << " " << reseau[i].getSuivNeurones() << endl;
 
         // On affiche tout les poids
-        for(unsigned int j = 0; j < reseau[i]->getPoids().size() ; j++)
+        for(int j = 0; j < reseau[i].getNbNeurones() ; j++)
         {
-            for(unsigned int k = 0; k < reseau[i]->getPoids().at(j).size(); k++)
+            for(int k = 0; k < reseau[i].getSuivNeurones(); k++)
             {
-                file << reseau[i]->getPoids()[j][k] << " ";
+                file << reseau[i].getPoids()[j][k] << " ";
             }
             file << endl;
         }
     }
 
+}
+
+void ReseauNeurone::save(const string &file_name)
+{
+    ofstream file;
+    file.open(file_name);
+
+    save(file);
+
     file.close();
 }
 
-
-void ReseauNeurone::load(string& file_name)
+void ReseauNeurone::load(ifstream &file)
 {
-    ifstream file;
-    file.open(file_name);
-
     // On recupère le nombre de couche du reseau
     unsigned int size;
     file >> size;
-    reseau.resize(size);
-
-    // On recupere le nombre de neuronne par couche
-    for(unsigned int i = 0; i < size; i++)
-    {
-        short nb;
-        file >> nb;
-
-        if(i == 0)
-            reseau[i] = new CoucheNeurones(nb, ENTREE);
-        else if(i == size - 1)
-            reseau[i] = new CoucheNeurones(nb, SORTIE);
-        else
-            reseau[i] = new CoucheNeurones(nb, HIDDEN);
-    }
 
     // On recupere le poids de chacune des couches
-    for(unsigned int i = 0; i < size - 1; i++)
+    for(unsigned int i = 0; i < size; i++)
     {
         // On recupère la taille
         int x, y;
         file >> x >> y;
 
-        // On redimentionne bien la matrice de poids
-        reseau[i]->getPoids().resize(x);
+        // Matrice qui va servir a stocker les poids, ensuite elle va être copié
+        vector<vector<float> > poids;
+
+        poids.resize(x);
 
         // On recupère la valeur de chacun des poids
         for(int j = 0; j < x; j++)
@@ -132,32 +99,41 @@ void ReseauNeurone::load(string& file_name)
                 float p;
                 file >> p;
 
-                reseau[i]->getPoids()[j].push_back(p);
+                // On stocke chaque poids dans la matrice
+                poids[j].push_back(p);
             }
         }
+        // On alloue chaque couche grâce au constructeur qui prend une matrice de poids
+        reseau.push_back(CoucheNeurones(poids));
     }
+}
 
-    // On alloue de l'espace pour le résultat du calcul intermédiaire sur chaque couche
-    // Le résultat est proportionelle a la taille de la couche suivante (multiplication matrice)
-    for(unsigned int i = 0; i < size - 1; i++)
-        reseau[i]->getResult().resize(reseau[i+1]->getNbNeurones());
+void ReseauNeurone::load(const string& file_name)
+{
+    ifstream file;
+    file.open(file_name);
+
+    load(file);
+
+    file.close();
 }
 
 
 
-vector<float>& ReseauNeurone::calculResult(vector<float>& entree)
-{
+const vector<float> &ReseauNeurone::calculResult(vector<float>& entree)
+{   
+
     // On calcul (matrice) pour la couche d'entree vers la premiere couche cachee
-    reseau[0]->calculResult(entree);
+    reseau[0].calculResult(entree, false);
 
     // On calcule le resultat pour toute les couches cachés
     // Le resultat précédents sert à la couche suivant pour calculé le résultats
-    for(unsigned int i = 1; i < reseau.size() - 1; i++)
+    for(unsigned int i = 1; i < reseau.size(); i++)
     {
-        reseau[i]->calculResult(reseau[i-1]->getResult());
+        reseau[i].calculResult(reseau[i-1].getResult(), true);
     }
 
-    return reseau[reseau.size() - 2]->getResult();
+    return reseau.back().getResult();
 }
 
 

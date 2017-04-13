@@ -31,7 +31,7 @@ using namespace std;
 enum {TRAIN_AGAINST_RANDOM};
 enum {HIDDEN, ENTREE, SORTIE};
 enum {NUL = -2, VIDE = -1, JOUEUR1 = 0, JOUEUR2 = 1, VICTOIRE_JOUEUR1 = 2, VICTOIRE_JOUEUR2 = 3};
-enum {AUCUNE_IA = -1, RANDOM_IA = 0, MIN_MAX_IA = 1};
+enum {AUCUNE_IA = -1, RANDOM_IA = 0, MIN_MAX_IA = 1, RESEAU_NEURONE_IA = 2};
 
 #define TAILLE_CASE 100
 #define NB_CASE_HORIZONTAL 3
@@ -44,7 +44,7 @@ enum {AUCUNE_IA = -1, RANDOM_IA = 0, MIN_MAX_IA = 1};
 
 #define INFINI 1000
 
-#define NB_VALEUR_POID 100
+#define NB_VALEUR_POID 1000
 
 
 #endif // CONST_H

@@ -14,7 +14,7 @@ public:
     Jeu(QWidget *parent = nullptr);
     ~Jeu();
 
-    void recommencer(bool avecIA, char typeIa, bool IACommence);
+    void recommencer(bool avecIA, char typeIa, bool IACommence, string filename);
 
 private:
     vector<char> m_grille;

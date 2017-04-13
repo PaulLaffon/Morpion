@@ -78,19 +78,29 @@ MainWindow::MainWindow(QWidget *parent) : QWidget(parent)
     QTime t;
     t.start();
 
-    IA *m = new IAReseauNeurone("C:\\Users\\Paul\\Documents\\Qt\\Morpion\\neuralnetwork\\first.txt");
+    string filename = "C:\\Users\\Paul\\Documents\\Qt\\Morpion\\neuralnetwork\\pop1.txt";
+    string best = "C:\\Users\\Paul\\Documents\\Qt\\Morpion\\neuralnetwork\\best1.txt";
 
-    pair<int, int> r = m->train(0);
+    Judge j;
+
+    //j.loadGenetique(filename);
 
 
-    qDebug("Partie perdue début : %d, Partie perdu fin : %d", r.first, r.second);
+    j.loadRandom(1500);
+
+    j.evolve(15);
+
+
+
+    j.saveGenetique(filename);
+    j.saveBest(best);
+
+
+
     qDebug("Time elapsed: %d ms", t.elapsed());
 
 
-
-
-
-    jeu->recommencer(m_avecIa->isChecked(), m_choixIA->currentIndex(), m_iaCommence->isChecked());
+    jeu->recommencer(m_avecIa->isChecked(), m_choixIA->currentIndex(), m_iaCommence->isChecked(), m_filepath->text().toUtf8().constData());
 }
 
 MainWindow::~MainWindow()
@@ -127,7 +137,7 @@ void MainWindow::indiquerVainqueur(char vainqueur)
 
 void MainWindow::recommencer()
 {
-    jeu->recommencer(m_avecIa->isChecked(), m_choixIA->currentIndex(), m_iaCommence->isChecked());
+    jeu->recommencer(m_avecIa->isChecked(), m_choixIA->currentIndex(), m_iaCommence->isChecked(), m_filepath->text().toUtf8().constData());
 }
 
 void MainWindow::choisirFichier()

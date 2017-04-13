@@ -8,24 +8,30 @@ class ReseauNeurone : public QObject
 {
     Q_OBJECT
 public:
-    ReseauNeurone(string file_name);
-    ReseauNeurone(string file_name, int nbCouches, vector<int>& neuroneParCouche);
+    ReseauNeurone(const string& file_name); // Constructeur avec fichier
+    ReseauNeurone(ifstream &file); // Constructeur avec flux de fichier
+    ReseauNeurone(const vector<int>& neuroneParCouche); // Construcrteur aléatoire
+
+    // Constructeur pour l'algo génétique qui donne naissance a un fils
+    ReseauNeurone(const ReseauNeurone& parent1, const ReseauNeurone& parent2);
     ~ReseauNeurone();
 
-    void save(string& file_name);
-    void load(string& file_name);
+    void save(const string& file_name);
+    void save(ofstream& file);
 
-    vector<float>& calculResult(vector<float>& entree);
+    void load(const string& file_name);
+    void load(ifstream &file);
 
-    inline int getNbCouche() {return reseau.size();}
-    inline int getCoucheSize(int i) {return reseau[i]->getNbNeurones();}
-    inline float& getPoids(int couche, int i, int j) {return reseau[couche]->getPoids()[i][j];}
+    const vector<float>& calculResult(vector<float>& entree);
 
-    inline string& getFileName() {return filename;}
+    inline const CoucheNeurones& getCouche(int i) const {return reseau[i];}
+
+    inline int getNbCouche() const {return reseau.size();}
+    inline int getCoucheSize(int i) const {return reseau[i].getNbNeurones();}
+    //inline float& getPoids(int couche, int i, int j) {return reseau[couche].getPoids()[i][j];}
 
 private:
-    vector<CoucheNeurones*> reseau;
-    string filename;
+    vector<CoucheNeurones> reseau;
 
 signals:
 

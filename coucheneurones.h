@@ -3,32 +3,36 @@
 
 #include  "const.h"
 
-class CoucheNeurones : public QObject
+class CoucheNeurones
 {
-    Q_OBJECT
-public:
-    explicit CoucheNeurones(short numberNeurones, char typeCouche);
 
-    void initializeRandom(short nb_neuronesSuiv);
+public:
+    CoucheNeurones(const short numberNeurones, const short neuronesCoucheSuiv); // Constructeur aléatoire
+    CoucheNeurones(const vector<vector<float> >& p); // Constructeur avec poids
+
+    // Constructeur a partir des parents
+    CoucheNeurones(const CoucheNeurones& parent1, const CoucheNeurones& parent2);
+
+
 
     inline vector<float>& getResult() {return result;}
-    inline short getNbNeurones() {return nb_neurones;}
 
-    inline vector<vector<float> >& getPoids() {return poids;}
+    inline short getNbNeurones() const {return nb_neurones;}
+    inline short getSuivNeurones() const {return poids[0].size();}
 
-    vector<float>& calculResult(vector<float> &pred);
+    inline const vector<vector<float> >& getPoids() const {return poids;}
+
+    // Retourne le résultat qui va être calculé par la couche suivante
+    vector<float>& calculResult(vector<float> &pred, bool activationFunction);
 
 private:
     short nb_neurones;
     vector<vector<float> > poids;
     vector<float> result;
-    char type;
 
     void fonctionActivation(vector<float> &pred);
 
-signals:
 
-public slots:
 };
 
 #endif // COUCHENEURONNES_H
