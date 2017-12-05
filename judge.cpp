@@ -262,11 +262,11 @@ void Judge::reproduceGentique()
 
         int indiceParent1, indiceParent2;
 
-        // On prends les parents parmis les 10% des meilleurs
+        // On prends les parents parmis ceux qui ont survécu à la selection
         do
         {
-            indiceParent1 = rand() % (population.size() / 10);
-            indiceParent2 = rand() % (population.size() / 10);
+            indiceParent1 = rand() % population.size();
+            indiceParent2 = rand() % population.size();
         }while(population[indiceParent1] == nullptr || population[indiceParent2] == nullptr);
 
         population[indiceFirt] = new IAReseauNeurone(*population[indiceParent1], *population[indiceParent2]);

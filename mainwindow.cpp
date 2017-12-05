@@ -78,8 +78,8 @@ MainWindow::MainWindow(QWidget *parent) : QWidget(parent)
     QTime t;
     t.start();
 
-    string filename = "C:\\Users\\Paul\\Documents\\Qt\\Morpion\\neuralnetwork\\pop1.txt";
-    string best = "C:\\Users\\Paul\\Documents\\Qt\\Morpion\\neuralnetwork\\best1.txt";
+    string filename = "C:\\Users\\Paul\\Documents\\Qt\\Morpion\\neuralnetwork\\test.txt";
+    string best = "C:\\Users\\Paul\\Documents\\Qt\\Morpion\\neuralnetwork\\testBest.txt";
 
     Judge j;
 
@@ -88,7 +88,7 @@ MainWindow::MainWindow(QWidget *parent) : QWidget(parent)
 
     j.loadRandom(1500);
 
-    j.evolve(15);
+    j.evolve(100);
 
 
 
@@ -98,7 +98,6 @@ MainWindow::MainWindow(QWidget *parent) : QWidget(parent)
 
 
     qDebug("Time elapsed: %d ms", t.elapsed());
-
 
     jeu->recommencer(m_avecIa->isChecked(), m_choixIA->currentIndex(), m_iaCommence->isChecked(), m_filepath->text().toUtf8().constData());
 }

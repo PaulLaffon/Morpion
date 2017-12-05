@@ -17,7 +17,7 @@ CoucheNeurones::CoucheNeurones(const short numberNeurones, const short neuronesC
     {
         for(int j = 0; j < neuronesCoucheSuiv; j++)
         {
-            float value = ((rand() % NB_VALEUR_POID) - NB_VALEUR_POID / 2) / (double)NB_VALEUR_POID * 10.0;
+            float value = rand() - RAND_MAX / 2;
             poids[i][j] = value;
         }
     }
@@ -35,17 +35,26 @@ CoucheNeurones::CoucheNeurones(const vector<vector<float> > &p) :nb_neurones(p.s
 
 CoucheNeurones::CoucheNeurones(const CoucheNeurones &parent1, const CoucheNeurones &parent2)
 {
-    // On cherche le point de cross over, c'est le point au on va changer de parent
-    int x = rand() % parent1.getNbNeurones();
-    int y = rand() % parent1.getSuivNeurones();
-
-    poids = parent1.getPoids();
-
-    for(int i = x; i < parent1.getNbNeurones(); i++)
+    poids.resize(parent1.getNbNeurones());
+    for(int i = 0; i < parent1.getNbNeurones(); i++)
     {
-        for(int j = y; j < parent1.getSuivNeurones(); j++)
+        poids[i].resize(parent1.getSuivNeurones());
+        for(int j = 0; j < parent1.getSuivNeurones(); j++)
         {
-            poids[i][j] = parent2.getPoids()[i][j];
+            if(rand() % 2)
+            {
+                poids[i][j] = parent1.getPoids()[i][j];
+            }
+            else
+            {
+                poids[i][j] = parent2.getPoids()[i][j];
+            }
+
+            // Mutations
+            if(rand() % 70 == 0)
+            {
+                poids[i][j] = rand() - RAND_MAX / 2;
+            }
         }
     }
 
@@ -58,8 +67,8 @@ void CoucheNeurones::fonctionActivation(vector<float> &pred)
 {
     for(unsigned int i = 0; i < pred.size(); i++)
     {
-        if(pred[i] < 1)
-            pred[i] = 0.0;
+        if(pred[i] > 0)
+            pred[i] *= 3;
     }
 }
 
